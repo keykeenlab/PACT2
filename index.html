@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PACT2 양육태도 검사 | KeyKeen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --yellow: #FFD600;
+    --gray: #1a1a1a;
+    --gray2: #2a2a2a;
+    --gray3: #444;
+    --light: #f5f5f5;
+    --white: #ffffff;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', 'Helvetica Neue', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--black);
+    border-bottom: 1px solid #1e1e1e;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--yellow);
+    text-transform: uppercase;
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .progress-text {
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 0.05em;
+  }
+
+  .progress-bar {
+    width: 120px;
+    height: 2px;
+    background: #222;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--yellow);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* MAIN */
+  .main {
+    padding-top: 56px;
+    min-height: 100vh;
+  }
+
+  /* INTRO */
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    padding: 48px 24px;
+    text-align: center;
+  }
+
+  .intro-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 24px;
+  }
+
+  .intro-title {
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .intro-title span {
+    color: var(--yellow);
+  }
+
+  .intro-sub {
+    font-size: 15px;
+    color: #888;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .intro-info {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .info-item {
+    text-align: center;
+  }
+
+  .info-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--yellow);
+    line-height: 1;
+  }
+
+  .info-label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .name-section {
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 32px;
+  }
+
+  .name-label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    text-align: left;
+  }
+
+  .name-input {
+    width: 100%;
+    background: var(--gray2);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: var(--white);
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .name-input:focus {
+    border-color: var(--yellow);
+  }
+
+  .name-input::placeholder {
+    color: #555;
+  }
+
+  .btn-start {
+    background: var(--yellow);
+    color: var(--black);
+    border: none;
+    border-radius: 8px;
+    padding: 16px 48px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+
+  .btn-start:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+
+  .btn-start:active {
+    transform: translateY(0);
+  }
+
+  /* QUIZ */
+  .quiz {
+    display: none;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .question-block {
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-page {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+
+  .q-text {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 36px;
+    letter-spacing: -0.01em;
+  }
+
+  .q-number {
+    color: var(--yellow);
+    font-weight: 700;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--gray2);
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+    color: #aaa;
+    font-family: inherit;
+    text-align: left;
+    width: 100%;
+  }
+
+  .option:hover {
+    border-color: #444;
+    color: var(--white);
+    background: #222;
+  }
+
+  .option.selected {
+    border-color: var(--yellow);
+    background: rgba(255, 214, 0, 0.08);
+    color: var(--white);
+  }
+
+  .option-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #444;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option.selected .option-dot {
+    border-color: var(--yellow);
+    background: var(--yellow);
+  }
+
+  .option.selected .option-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--black);
+  }
+
+  .nav-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .btn-prev {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-prev:hover {
+    border-color: #666;
+    color: var(--white);
+  }
+
+  .btn-next {
+    background: var(--yellow);
+    color: var(--black);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 36px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-left: auto;
+  }
+
+  .btn-next:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .btn-next:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* COMPLETE */
+  .complete {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    padding: 48px 24px;
+    text-align: center;
+  }
+
+  .complete-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    font-size: 32px;
+  }
+
+  .complete-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .complete-sub {
+    font-size: 15px;
+    color: #888;
+    line-height: 1.7;
+    max-width: 360px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .btn-download {
+    background: var(--yellow);
+    color: var(--black);
+    border: none;
+    border-radius: 8px;
+    padding: 16px 40px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-download:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .btn-restart {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 14px;
+    transition: all 0.15s;
+  }
+
+  .btn-restart:hover {
+    border-color: #666;
+    color: var(--white);
+  }
+
+  @media (max-width: 480px) {
+    .intro-info { gap: 20px; }
+    .q-text { font-size: 16px; }
+    .btn-next, .btn-prev { padding: 14px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">KeyKeen</div>
+  <div class="progress-wrap">
+    <span class="progress-text" id="progressText">0 / 50</span>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- INTRO -->
+  <div class="intro" id="introSection">
+    <div class="intro-tag">PACT2 · Parenting Attitude Check Tool</div>
+    <h1 class="intro-title">양육태도<br><span>면밀 검사지</span></h1>
+    <p class="intro-sub">자녀의 학습과 성장을 돕는 나의 양육 태도를<br>50가지 문항으로 면밀하게 살펴봅니다.</p>
+    <div class="intro-info">
+      <div class="info-item">
+        <div class="info-num">50</div>
+        <div class="info-label">문항</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">5~8</div>
+        <div class="info-label">분 소요</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">5점</div>
+        <div class="info-label">척도</div>
+      </div>
+    </div>
+    <div class="name-section">
+      <div class="name-label">자녀 이름 (선택)</div>
+      <input class="name-input" id="childName" type="text" placeholder="예: 홍길동" maxlength="20">
+    </div>
+    <button class="btn-start" onclick="startQuiz()">검사 시작하기</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz" id="quizSection">
+    <div class="question-block" id="questionBlock">
+      <div class="q-page" id="qPage"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsList"></div>
+      <div class="nav-btns">
+        <button class="btn-prev" id="btnPrev" onclick="prevQ()">← 이전</button>
+        <button class="btn-next" id="btnNext" onclick="nextQ()">다음 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLETE -->
+  <div class="complete" id="completeSection">
+    <div class="complete-icon">✓</div>
+    <div class="complete-title">검사 완료!</div>
+    <p class="complete-sub">50개 문항에 모두 응답해주셨습니다.<br>아래 버튼을 눌러 결과를 CSV로 저장하세요.</p>
+    <button class="btn-download" onclick="downloadCSV()">
+      <span>⬇</span> CSV 파일 저장
+    </button>
+    <button class="btn-restart" onclick="restartQuiz()">다시 시작</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  "자녀가 실패했을 때, 위로하며 다음 기회를 준비하도록 돕는다.",
+  "자녀가 학습 목표를 초과 달성했을 때, 스스로 다음 목표를 설정하도록 유도한다.",
+  "자녀가 규칙을 이해하지 못할 때, 이유를 명확히 설명한다.",
+  "자녀가 학습 계획을 세울 때, 자율성을 존중하며 필요한 지원을 제공한다.",
+  "자녀가 학습 성과를 내지 못했을 때, 성과보다 과정의 의미를 강조한다.",
+  "자녀가 좌절감을 느낄 때, 이유를 듣고 감정을 인정하며 위로한다.",
+  "자녀가 도전을 회피하려 할 때, 반드시 도전하도록 강하게 설득한다.",
+  "자녀가 새로운 것을 시도하려 할 때, 적극적으로 격려한다.",
+  "자녀가 학습 태도를 소홀히 할 때, 학습 태도와 그 중요성에 대해 대화한다.",
+  "자녀가 노는 시간을 보내려 할 때, 정해진 학습을 우선하도록 요구한다.",
+  "자녀가 친구와 시간을 보내려 할 때, 학습을 우선하도록 요구한다.",
+  "자녀가 실패했을 때, 실패를 성장의 기회로 받아들일 수 있도록 돕는다.",
+  "자녀가 학습 시간 관리를 못할 때, 시간의 중요성을 설명한다.",
+  "자녀가 자신의 학습 성과를 과소평가할 때, 긍정적인 피드백을 준다.",
+  "자녀가 잘못된 행동을 반복했을 때, 원인을 설명하며 개선을 돕는다.",
+  "자녀가 학습 목표를 낮게 설정했을 때, 스스로 목표를 조정할 수 있도록 돕는다.",
+  "자녀가 학습 중 쉬고 싶어할 때, 쉬는 시간을 조정한다.",
+  "자녀가 성과를 자랑스러워할 때, 다음 목표를 구체적으로 세울 수 있도록 돕는다.",
+  "자녀가 학습 계획을 변경하려 할 때, 필요성을 듣고 협의한다.",
+  "자녀가 학습 목표를 세우지 않을 때, 더 높은 기준을 요구한다.",
+  "자녀가 학습 환경에서 방해를 받을 때, 이를 즉각적으로 해결한다.",
+  "자녀가 새로운 학습 방법을 제안했을 때, 이를 진지하게 검토하고 긍정적으로 반응한다.",
+  "자녀가 학습 태도에 변화를 보일 때, 반응이 일관되지 않다.",
+  "자녀의 학습 결과를 다른 아이들과 비교하며 격려한다.",
+  "자녀가 스트레스를 받을 때, 충분히 공감하며 대화한다.",
+  "자녀가 학습 계획을 자율적으로 정하려 할 때, 이를 세부적으로 지시한다.",
+  "자녀가 학습 성과에 대해 스트레스를 받을 때, 성과의 중요성을 강조한다.",
+  "자녀가 학습 목표를 초과 달성했을 때, 성취에 만족하지 않고 추가적인 기대를 한다.",
+  "자녀가 새로운 규칙을 요청할 때, 이유를 듣고 조정한다.",
+  "자녀가 실패로 실망했을 때, 위로하며 긍정적으로 격려한다.",
+  "자녀가 학습 태도에 변화를 보일 때, 대처 방식이 다르다.",
+  "자녀가 규칙이나 약속을 반복해서 어겼을 때, 휴대폰 제한·외출 금지 등의 불이익을 준다.",
+  "자녀가 숙제나 학습을 거부할 때, 즉시 불이익(예: 게임·유튜브 금지)을 준다.",
+  "자녀가 학습 태도를 발전시키려고 할 때, 더 큰 기대치를 부여한다.",
+  "자녀가 학습 목표를 초과 달성했을 때, 다음 목표를 제안한다.",
+  "자녀가 학습에 집중을 못할 때, 개입 여부가 매번 다르다.",
+  "자녀가 도전을 두려워할 때, 도전의 장점을 명확히 설명한다.",
+  "자녀가 학습 중 쉬고 싶어할 때, 계획한 시간을 조정한다.",
+  "자녀가 학습 성과에 대해 자랑스러워할 때, 긍정적으로 반응한다.",
+  "자녀가 학습 목표를 초과 달성했을 때, 추가적인 기대를 부여한다.",
+  "자녀가 학습 결과에 만족하지 못할 때, 노력보다 과정에서 배운 점을 되돌아보도록 유도한다.",
+  "자녀가 학습 계획을 어겼을 때, 대처 방식이 상황마다 달라진다.",
+  "자녀가 규칙을 어겼을 때, 이유를 묻고 다시 설명한다.",
+  "자녀가 성취하지 못한 결과를 다른 아이들과 비교한다.",
+  "자녀가 학습 목표를 세우지 못할 때, 일관된 지침 없이 반응한다.",
+  "자녀가 자신의 학습 성과를 과소평가할 때, 구체적인 예시를 들어 더 높은 기준을 제시한다.",
+  "자녀가 학습 중 노력하지 않을 때, 문제를 파악하고 해결한다.",
+  "자녀가 학습에서 주도권을 가지려 할 때, 이를 통제한다.",
+  "자녀의 학습에 항상 결과를 강조한다.",
+  "자녀가 학습 성과를 내지 못했을 때, 더 높은 노력을 요구한다."
+];
+
+const optionLabels = [
+  "① 전혀 그렇지 않다",
+  "② 그렇지 않다",
+  "③ 보통이다",
+  "④ 그렇다",
+  "⑤ 매우 그렇다"
+];
+
+let answers = new Array(50).fill(null);
+let currentQ = 0;
+let childName = "";
+
+function startQuiz() {
+  childName = document.getElementById('childName').value.trim() || "미입력";
+  document.getElementById('introSection').style.display = 'none';
+  document.getElementById('quizSection').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const block = document.getElementById('questionBlock');
+  block.style.animation = 'none';
+  block.offsetHeight;
+  block.style.animation = 'fadeUp 0.3s ease';
+
+  document.getElementById('qPage').textContent = `문항 ${currentQ + 1} / ${questions.length}`;
+  document.getElementById('qText').innerHTML = `<span class="q-number">Q${currentQ + 1}.</span> ${questions[currentQ]}`;
+
+  const opts = document.getElementById('optionsList');
+  opts.innerHTML = '';
+  optionLabels.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option' + (answers[currentQ] === i + 1 ? ' selected' : '');
+    btn.innerHTML = `<span class="option-dot"></span><span>${label}</span>`;
+    btn.onclick = () => selectOption(i + 1);
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('btnPrev').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  document.getElementById('btnNext').textContent = currentQ === questions.length - 1 ? '완료 ✓' : '다음 →';
+  document.getElementById('btnNext').disabled = answers[currentQ] === null;
+
+  const filled = answers.filter(a => a !== null).length;
+  document.getElementById('progressText').textContent = `${filled} / 50`;
+  document.getElementById('progressFill').style.width = `${(filled / 50) * 100}%`;
+}
+
+function selectOption(val) {
+  answers[currentQ] = val;
+  renderQuestion();
+}
+
+function nextQ() {
+  if (answers[currentQ] === null) return;
+  if (currentQ === questions.length - 1) {
+    showComplete();
+    return;
+  }
+  currentQ++;
+  renderQuestion();
+}
+
+function prevQ() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+function showComplete() {
+  document.getElementById('quizSection').style.display = 'none';
+  const comp = document.getElementById('completeSection');
+  comp.style.display = 'flex';
+  document.getElementById('progressText').textContent = '50 / 50';
+  document.getElementById('progressFill').style.width = '100%';
+}
+
+function downloadCSV() {
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  let csv = '\uFEFF'; // BOM for Excel Korean
+  csv += `검사명,PACT2 양육태도 면밀 검사지\n`;
+  csv += `자녀 이름,${childName}\n`;
+  csv += `검사 일시,${dateStr} ${timeStr}\n`;
+  csv += `\n`;
+  csv += `문항번호,문항 내용,응답 점수,응답 내용\n`;
+
+  questions.forEach((q, i) => {
+    const score = answers[i] || 0;
+    const label = score > 0 ? optionLabels[score - 1] : '-';
+    csv += `${i+1},"${q}",${score},"${label}"\n`;
+  });
+
+  const total = answers.reduce((s, a) => s + (a || 0), 0);
+  csv += `\n총점,${total},평균,${(total / 50).toFixed(2)}\n`;
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `PACT2_${childName}_${dateStr}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function restartQuiz() {
+  answers = new Array(50).fill(null);
+  currentQ = 0;
+  document.getElementById('completeSection').style.display = 'none';
+  document.getElementById('introSection').style.display = 'flex';
+  document.getElementById('progressText').textContent = '0 / 50';
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('childName').value = '';
+}
+</script>
+
+</body>
+</html>
