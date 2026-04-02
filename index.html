@@ -673,6 +673,36 @@ function restartQuiz() {
   document.getElementById('childName').value = '';
 }
 </script>
+<hr style="margin:40px 0; border:1px solid #333;">
 
+<h3 style="text-align:center;">문의하기</h3>
+
+<div style="max-width:400px; margin:20px auto;">
+  <input type="text" id="name" placeholder="이름" style="width:100%; padding:10px; margin-bottom:10px;">
+  <input type="email" id="email" placeholder="이메일" style="width:100%; padding:10px; margin-bottom:10px;">
+  <textarea id="message" placeholder="내용" style="width:100%; padding:10px; margin-bottom:10px;"></textarea>
+  <button onclick="sendMail()" style="width:100%; padding:12px; background:#FFD600; border:none;">문의 보내기</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+(function(){
+  emailjs.init("SbB05dpJbwNsTtFII");   // 👉 Public Key
+})();
+
+function sendMail(){
+  emailjs.send("service_uftq6r8","template_xrujwcm",{   // 👉 Service ID, Template ID
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    message: document.getElementById("message").value
+  }).then(function(){
+    alert("전송 성공!");
+  }, function(error){
+    alert("전송 실패");
+    console.log(error);
+  });
+}
+</script>
 </body>
 </html>
